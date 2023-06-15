@@ -1,5 +1,3 @@
-import string
-
 def imprimeLab(xR, yR, xS, yS, Laberinto):
     Laberinto[xR][yR] = 'R'
     Laberinto[xS][yS] = 'S'
