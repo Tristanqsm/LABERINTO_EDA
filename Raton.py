@@ -54,13 +54,15 @@ def queso(vida):
     return vida
 
 #moverRaton nos ayuda a visualizar donde se encuentra el raton, modificando las listas del laberinto, segun las coordenadas que pida el usuario
-def moverRaton(Laberinto):
+def moverRaton(Laberinto, xi, yi):
     
-    print("\nIngrese las coordenas para mover al raton")
+    Laberinto[yi][xi] = "E" #Se borra al antiguo raton
+    
+    print("\nIngrese las coordenas para mover al raton") #Se piden las nuevas coordenadas
     x = int(input("x = "))
     y = int(input("y = "))
     
-    if (coordenadasValidas(x, y, Laberinto)): #Si ambas son iguales es por que retornan un 1, lo que quiere decir que es posible moverse alli
+    if (coordenadasValidas(x, y, Laberinto)): #Si coordenadas validas retorna un 1, es posible moverse alli
         
         Laberinto[y][x] = "R"
         return Laberinto
@@ -127,17 +129,21 @@ try:
     Laberinto[yQ2][xQ2] = "Q"
     Laberinto[yQ3][xQ3] = "Q"
     Laberinto[yQ4][xQ4] = "Q"
+    
+#Se agrega el raton al laberinto
+    Laberinto[yR][xR] = "R"
         
 #Se solicita la vida con la que iniciara el raton y se almacenara en la variable vidaR
 
     vidaR = int(input("¿Cuanta vida tiene el raton?\n"))
-        
-#Se llama a la funcion mover Raton para pedir las coordenadas en las que iniciara y verificar que pueda estar alli
-
-    Laberinto = moverRaton(Laberinto)
 
 #Se muestra el laberinto inicial
 
+    imprimeLab(Laberinto)
+    
+#Se llama a la funcion mover Raton para pedir las coordenadas a las que se movera y verificar que pueda estar alli
+
+    Laberinto = moverRaton(Laberinto, xR, yR)
     imprimeLab(Laberinto)
     
     
