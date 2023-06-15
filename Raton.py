@@ -39,6 +39,23 @@ try:
 
 # "Linea2" guarda el segundo renglon del archivo txt, donde se encuentran las coordenadas de los quesos
     Linea2 = renglon[1]
+    
+    # Coordenadas del primer queso:
+    xQ1 = int(Linea2[0])
+    yQ1 = int(Linea2[2])
+    
+    # Coordenadas del segundo queso:
+    xQ2 = int(Linea2[4])
+    yQ2 = int(Linea2[6])
+    
+    # Coordenadas del tercer queso:
+    xQ3 = int(Linea2[8])
+    yQ3 = int(Linea2[10])
+    
+    # Coordenadas del cuarto queso:
+    xQ4 = int(Linea2[12])
+    yQ4 = int(Linea2[14])
+
 
 # "Linea3" guarda el tercer renglon del archivo txt, donde se encuentra la vida que otorgan los quesos y la vida del raton
     Linea3 = renglon[2]
