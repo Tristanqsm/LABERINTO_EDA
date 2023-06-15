@@ -41,7 +41,14 @@ try:
     Linea2 = renglon[1]
 
 # "Linea3" guarda el tercer renglon del archivo txt, donde se encuentra la vida que otorgan los quesos y la vida del raton
+    Linea3 = renglon[2]
 
+    #Vida de los quesos:
+    vQ = int(Linea3[0:2])
+
+    #Vida del raton:
+    vR = int(Linea3[3:5])
+    
 # "Laberinto" guardara la estructura del laberinto
     #"""
     renglon = renglon[3:]
@@ -53,6 +60,9 @@ try:
     
     print(f"Las coordenadas del raton son:", "(",xR, ", ",yR, ")")
     print(f"Las coordenadas de la salida son:", "(",xS, ", ",yS, ")")
+    print(f"Las coordenadas de los quesos son:")
+    print(f"La vida que otorga un queso es:", vQ)
+    print(f"La vida del raton es:", vR)
     imprimeLab(xR, yR, xS, yS, Laberinto)
 
 
