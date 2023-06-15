@@ -49,7 +49,7 @@ try:
     for r in renglon:
         L = r.strip().split()
         Laberinto.append(L)
-    Laberinto = [list(elemento[0]) for elemento in Laberinto]
+    Laberinto = [list(sublista[0]) for sublista in Laberinto]
     
     print(f"Las coordenadas del raton son:", "(",xR, ", ",yR, ")")
     print(f"Las coordenadas de la salida son:", "(",xS, ", ",yS, ")")
