@@ -43,23 +43,17 @@ try:
 # "Linea3" guarda el tercer renglon del archivo txt, donde se encuentra la vida que otorgan los quesos y la vida del raton
 
 # "Laberinto" guardara la estructura del laberinto
-    Laberinto = renglon[3:]
-    
-    print(Laberinto)
+    renglon = renglon[3:]
+    Laberinto = []
+    for r in renglon:
+        L = r.strip()
+        Laberinto.append(L)
 
-    """
-    Laberinto = [
-            list("EEEXEE"),
-            list("EXXXEX"),
-            list("EXEEEE"),
-            list("EXEXXE"),
-            list("EEEEXE"),
-    ]
+    print(Laberinto)
     
     print(f"Las coordenadas del raton son:", "(",xR, ", ",yR, ")")
     print(f"Las coordenadas de la salida son:", "(",xS, ", ",yS, ")")
     imprimeLab(xR, yR, xS, yS, Laberinto)
-    """
 
 
 except FileNotFoundError:
