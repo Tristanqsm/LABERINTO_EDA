@@ -19,19 +19,27 @@ def imprimeLab(xR, yR, xS, yS, Laberinto, Quesos):
         for columna in fila:
             if columna == 'E':
                 print(f'E', end = ' ')
-            elif columna == 'R':
-                print(f'R', end = ' ')
-            elif columna == 'S':
-                print(f'S', end = ' ')
-            elif columna == 'Q':
-                print(f'Q', end = ' ')
             else:
-                print(f'X', end = ' ')
+                if columna == 'R':
+                    print(f'R', end = ' ')
+                else:
+                    if columna == 'S':
+                        print(f'S', end = ' ')
+                    else:
+                        if columna == 'Q':
+                            print(f'Q', end = ' ')
+                        else:
+                            print(f'X', end = ' ')
         print()
     print()
     return
 
+#
+def resolucion():
+    print
 
+
+#======== AQUI EMPIEZA EL PROGRAMA PRINCIPAL ========#
 # "try" nos ayudara a mandar un mensaje de error si el archivo no le logro abrir
 try:
     archivo = open('ArchivoRaton.txt')
@@ -81,10 +89,12 @@ try:
     print(f"Las coordenadas de los quesos son:", Quesos)
     print(f"La vida que otorga un queso es:", vQ)
     print(f"La vida del raton es:", vR)
+    
     imprimeLab(xR, yR, xS, yS, Laberinto, Quesos)
+    
+    resolucion()
 
-
-
+#Si el archivo no se puede abrir se imprimira un mensaje de ERROR
 except FileNotFoundError:
     print("\nERROR    ::EL ARCHIVO NO SE ENCONTRO::\n") 
    
