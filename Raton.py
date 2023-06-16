@@ -34,14 +34,12 @@ def imprimeLab(xR, yR, xS, yS, Laberinto, Quesos):
     print()
     return
 
-def posiblesCaminos(Laberinto, xR, yR, camino, vQ, vR):
+def posiblesCaminos(Laberinto, xR, yR, camino):
     posiblesPasos = []
 
     #Arriba
     if yR > 0 and Laberinto[yR-1][xR] != 'X':
         posiblesPasos.append([xR, yR-1])
-        #if yR > 0 and Laberinto[yR-1][xR] == 'Q':
-         #   vR = vR+vQ
     
     #Derecha
     if xR < len(Laberinto[0]) and Laberinto[yR][xR+1] != 'X':
@@ -54,35 +52,40 @@ def posiblesCaminos(Laberinto, xR, yR, camino, vQ, vR):
     #Izquierda
     if xR > 0 and Laberinto[yR][xR-1] != 'X':
         posiblesPasos.append([xR-1, yR])
-    
-
-    #Si llega a un bucle:
-    if (xR, yR) in camino:
-        return posiblesPasos[0][1]
-
-    return posiblesPasos
 
 
 
-def resolucion(xR,yR, xS, yS, Laberinto, camino, vQ, vR):
+def resolucion(xR,yR, xS, yS, Laberinto, camino):
     posibleCamino = []
     if xR == xS and yR == yS:
-        print("\n\nESTATUS:")
-        if len(camino) > vR:
-            print("Encontre la salida, pero no sobrevivi :( ")
-        else:
-            print("LOGRE SALIR!!")
-            camino.append([xS, yS])
-            print("Mi camino fue: ", camino)
+        print("LOGRE SALIR!!")
+        camino.append([xS, yS])
+        print("Mi camino fue: ", camino)
         return
+    
+    coordenada = [xR, yR]
+    posibleCamino = []
+    
+    #Intenta encontrar si esas coordenadas ya estan en el camino que ha recorrido
+    try:
+        indice = camino.index(coordenada) #En caso de ya haber pasado por ahi, encontramos el indice en el que esta
+        posibleCamino.append(posiblesCaminos(Laberinto, xR, yR, camino)) 
+        posibleCamino.remove(camino[indice + 1]) #Se llama a posibles caminos de forma normal, pero se quita lo que hizo despues de pasar por el punto repetido
+        print(posibleCamino)
+        
+        xR = posibleCamino[0][0][1]
+        yR = posibleCamino[0][0[1]]
+        resolucion(xR,yR,xS,yS, Laberinto, camino)
+        
+    #Si no hay bucle, sigue su camino con normalidad
+    except:
+        posibleCamino.append(posiblesCaminos(Laberinto, xR, yR, camino))
+        print(posibleCamino)
 
-    posibleCamino.append(posiblesCaminos(Laberinto, xR, yR, camino, vQ, vR))
-    print(posibleCamino)
-
-    camino.append([xR, yR])
-    xR = posibleCamino[0][0][0]
-    yR = posibleCamino[0][0][1]
-    resolucion(xR,yR,xS,yS, Laberinto, camino, vQ, vR)
+        camino.append([xR, yR])
+        xR = posibleCamino[0][0][0]
+        yR = posibleCamino[0][0][1]
+        resolucion(xR,yR,xS,yS, Laberinto, camino)
     
     
     
