@@ -11,7 +11,6 @@ EXAMEN EDA - LABERINTO
 def imprimeLab(xR, yR, xS, yS, Laberinto, Quesos):
     Laberinto[yR][xR] = 'R'
     Laberinto[yS][xS] = 'S'
-    
     for n in Quesos:
         Laberinto[n[1]][n[0]] = 'Q'
 
@@ -35,67 +34,61 @@ def imprimeLab(xR, yR, xS, yS, Laberinto, Quesos):
     print()
     return
 
-#Comprueba que el raton no se salte casillas en la coordenada x
-def movimientosX(xi, x):
-    if xi == 0 and x == 1:
-        return 1
-    elif xi == 4 and x == 3:
-        return 1
-    elif xi + 1 == x or xi - 1 == x or x == xi:
-        return 1
-    else: 
-        return 0
-    
-#Comprueba que el raton no se salte casillas en la coordenada y
-def movimientosY(yi, y):    
-    if yi == 0 and y == 1 :
-        return 1
-    elif yi == 4 and y == 3:
-        return 1
-    elif yi + 1 == y or yi - 1 == y or y == yi:
-        return 1
-    else: 
-        return 0
+def posiblesCaminos(Laberinto, xR, yR, camino):
+    posiblesPasos = []
 
-#Se crea una funcion que valide que las coordenadas a mover no choquen con paredes, esten dentro del laberinto 
-#y no haya saltos en los movimientos
-def coordenadasValidas(xi, yi, x, y, Laberinto):
+    #Arriba
+    if yR>0 and Laberinto[yR-1][xR] != 'X':
+        posiblesPasos.append([xR, yR-1])
     
-    if movimientosX(xi, x):
-        if movimientosY(yi, y):
-            if (Laberinto[y][x] != "X"): #Si en las coordenadas no hay una x, se puede mover
-                return 1
-        else:
-            print("\nCoordenada invalida")
-            return 0
-    else:
-        print("\nCoordenada invalida")
-        return 0
+    #Derecha
+    if xR<len(Laberinto[0]) and Laberinto[yR][xR+1] != 'X':
+        posiblesPasos.append([xR+1, yR])
+
+    #Abajo
+    if yR< len(Laberinto) and Laberinto[yR+1][xR] != 'X':
+        posiblesPasos.append([xR, yR+1])
+
+    #Izquierda
+    if xR>0 and Laberinto[yR][xR-1] != 'X':
+        posiblesPasos.append([xR-1, yR])
     
-#moverRaton nos ayuda a visualizar donde se encuentra el raton, modificando las listas del laberinto, segun las coordenadas que pida el usuario
-def moverRaton(Laberinto, xi, yi):
-    
-    print("\nIngrese las coordenas para mover al raton") #Se piden las nuevas coordenadas
-    x = int(input("x = "))
-    y = int(input("y = "))
-    
-    if (coordenadasValidas(xi, yi, x, y, Laberinto)): #Si coordenadas validas retorna un 1, es posible moverse alli
-        Laberinto[yi][xi] = "E" #Se borra al antiguo raton
-        Laberinto[y][x] = "R"
-        return (x, y)
-    else:
-        print("No es posible realizar el movimiento\n")
-        return (xi, yi)
+    #Si llega a un bucle:
+    if (xR, yR) in camino:
+        return posiblesPasos[0][1]
+
+    return posiblesPasos
+
 
 #
-#def resolucion():
-    #print
+def resolucion(xR,yR, xS, yS, Laberinto):
+    camino = []
+    posibleCamino = []
+    if xR == xS and yR == yS:
+        print("LOGRE SALIR!!")
+        print("Mi camino fue: ", camino)
+        return
+
+    posibleCamino.append(posiblesCaminos(Laberinto, xR, yR, camino))
+    print(posibleCamino)
+
+    camino.append([xR, yR])
+    xR = posibleCamino[0][0][0]
+    yR = posibleCamino[0][0][1]
+    resolucion(xR,yR,xS,yS, Laberinto)
+    
+    
+    
+    
+
+    
 
 
 #======== AQUI EMPIEZA EL PROGRAMA PRINCIPAL ========#
 # "try" nos ayudara a mandar un mensaje de error si el archivo no le logro abrir
 try:
-    archivo = open('ArchivoRaton.txt')
+    nombreArchivo = 'ArchivoRaton.txt'
+    archivo = open(nombreArchivo)
     # "renglon" es una lista. Cada renglon del archivo txt es un elemento de la lista
     renglon = archivo.readlines()
 
@@ -137,20 +130,20 @@ try:
     Laberinto = [list(sublista[0]) for sublista in Laberinto]
 
 #Datos leidos:
+    print("\n============ L A B E R I N T O ============\n")
     print(f"Las coordenadas del raton son:", "(",xR, ", ",yR, ")")
     print(f"Las coordenadas de la salida son:", "(",xS, ", ",yS, ")")
     print(f"Las coordenadas de los quesos son:", Quesos)
     print(f"La vida que otorga un queso es:", vQ)
     print(f"La vida del raton es:", vR)
     
-#Laberinto inicial:    
     imprimeLab(xR, yR, xS, yS, Laberinto, Quesos)
     
-#Se piden las nuevas coordenadas para mover al raton:
-    (xR, yR) = moverRaton(Laberinto, xR, yR)
-    imprimeLab(xR, yR) #Se actualiza el laberinto
-    
-    #resolucion()
+    resolucion(xR, yR, xS, yS, Laberinto)
+
+
+    archivo.close()
+    print("\n\nARCHIVO CERRADO: ", archivo.closed)
 
 #Si el archivo no se puede abrir se imprimira un mensaje de ERROR
 except FileNotFoundError:
