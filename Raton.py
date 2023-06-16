@@ -34,12 +34,14 @@ def imprimeLab(xR, yR, xS, yS, Laberinto, Quesos):
     print()
     return
 
-def posiblesCaminos(Laberinto, xR, yR, camino):
+def posiblesCaminos(Laberinto, xR, yR, camino, vQ, vR):
     posiblesPasos = []
 
     #Arriba
     if yR > 0 and Laberinto[yR-1][xR] != 'X':
         posiblesPasos.append([xR, yR-1])
+        #if yR > 0 and Laberinto[yR-1][xR] == 'Q':
+         #   vR = vR+vQ
     
     #Derecha
     if xR < len(Laberinto[0]) and Laberinto[yR][xR+1] != 'X':
@@ -53,6 +55,7 @@ def posiblesCaminos(Laberinto, xR, yR, camino):
     if xR > 0 and Laberinto[yR][xR-1] != 'X':
         posiblesPasos.append([xR-1, yR])
     
+
     #Si llega a un bucle:
     if (xR, yR) in camino:
         return posiblesPasos[0][1]
@@ -61,21 +64,25 @@ def posiblesCaminos(Laberinto, xR, yR, camino):
 
 
 
-def resolucion(xR,yR, xS, yS, Laberinto, camino):
+def resolucion(xR,yR, xS, yS, Laberinto, camino, vQ, vR):
     posibleCamino = []
     if xR == xS and yR == yS:
-        print("LOGRE SALIR!!")
-        camino.append([xS, yS])
-        print("Mi camino fue: ", camino)
+        print("\n\nESTATUS:")
+        if len(camino) > vR:
+            print("Encontre la salida, pero no sobrevivi :( ")
+        else:
+            print("LOGRE SALIR!!")
+            camino.append([xS, yS])
+            print("Mi camino fue: ", camino)
         return
 
-    posibleCamino.append(posiblesCaminos(Laberinto, xR, yR, camino))
+    posibleCamino.append(posiblesCaminos(Laberinto, xR, yR, camino, vQ, vR))
     print(posibleCamino)
 
     camino.append([xR, yR])
     xR = posibleCamino[0][0][0]
     yR = posibleCamino[0][0][1]
-    resolucion(xR,yR,xS,yS, Laberinto, camino)
+    resolucion(xR,yR,xS,yS, Laberinto, camino, vQ, vR)
     
     
     
@@ -140,7 +147,7 @@ try:
     
     imprimeLab(xR, yR, xS, yS, Laberinto, Quesos)
     
-    resolucion(xR, yR, xS, yS, Laberinto, camino)
+    resolucion(xR, yR, xS, yS, Laberinto, camino, vQ, vR)
 
 
     archivo.close()
