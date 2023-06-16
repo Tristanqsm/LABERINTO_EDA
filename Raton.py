@@ -38,19 +38,19 @@ def posiblesCaminos(Laberinto, xR, yR, camino):
     posiblesPasos = []
 
     #Arriba
-    if yR>0 and Laberinto[yR-1][xR] != 'X':
+    if yR > 0 and Laberinto[yR-1][xR] != 'X':
         posiblesPasos.append([xR, yR-1])
     
     #Derecha
-    if xR<len(Laberinto[0]) and Laberinto[yR][xR+1] != 'X':
+    if xR < len(Laberinto[0]) and Laberinto[yR][xR+1] != 'X':
         posiblesPasos.append([xR+1, yR])
 
     #Abajo
-    if yR< len(Laberinto) and Laberinto[yR+1][xR] != 'X':
+    if yR < len(Laberinto) and Laberinto[yR+1][xR] != 'X':
         posiblesPasos.append([xR, yR+1])
 
     #Izquierda
-    if xR>0 and Laberinto[yR][xR-1] != 'X':
+    if xR > 0 and Laberinto[yR][xR-1] != 'X':
         posiblesPasos.append([xR-1, yR])
     
     #Si llega a un bucle:
@@ -60,12 +60,12 @@ def posiblesCaminos(Laberinto, xR, yR, camino):
     return posiblesPasos
 
 
-#
-def resolucion(xR,yR, xS, yS, Laberinto):
-    camino = []
+
+def resolucion(xR,yR, xS, yS, Laberinto, camino):
     posibleCamino = []
     if xR == xS and yR == yS:
         print("LOGRE SALIR!!")
+        camino.append([xS, yS])
         print("Mi camino fue: ", camino)
         return
 
@@ -75,7 +75,7 @@ def resolucion(xR,yR, xS, yS, Laberinto):
     camino.append([xR, yR])
     xR = posibleCamino[0][0][0]
     yR = posibleCamino[0][0][1]
-    resolucion(xR,yR,xS,yS, Laberinto)
+    resolucion(xR,yR,xS,yS, Laberinto, camino)
     
     
     
@@ -130,6 +130,7 @@ try:
     Laberinto = [list(sublista[0]) for sublista in Laberinto]
 
 #Datos leidos:
+    camino = []
     print("\n============ L A B E R I N T O ============\n")
     print(f"Las coordenadas del raton son:", "(",xR, ", ",yR, ")")
     print(f"Las coordenadas de la salida son:", "(",xS, ", ",yS, ")")
@@ -139,7 +140,7 @@ try:
     
     imprimeLab(xR, yR, xS, yS, Laberinto, Quesos)
     
-    resolucion(xR, yR, xS, yS, Laberinto)
+    resolucion(xR, yR, xS, yS, Laberinto, camino)
 
 
     archivo.close()
@@ -148,4 +149,3 @@ try:
 #Si el archivo no se puede abrir se imprimira un mensaje de ERROR
 except FileNotFoundError:
     print("\nERROR    ::EL ARCHIVO NO SE ENCONTRO::\n") 
-   
