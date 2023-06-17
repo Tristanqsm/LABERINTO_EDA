@@ -34,7 +34,7 @@ def imprimeLab(xR, yR, xS, yS, Laberinto, Quesos):
     print()
     return
 
-def posiblesCaminos(Laberinto, xR, yR, camino):
+def posiblesCaminos(Laberinto, xR, yR):
     posiblesPasos = []
 
     #Arriba
@@ -52,8 +52,8 @@ def posiblesCaminos(Laberinto, xR, yR, camino):
     #Izquierda
     if xR > 0 and Laberinto[yR][xR-1] != 'X':
         posiblesPasos.append([xR-1, yR])
-
-
+        
+    return posiblesPasos
 
 def resolucion(xR,yR, xS, yS, Laberinto, camino):
     posibleCamino = []
@@ -69,22 +69,21 @@ def resolucion(xR,yR, xS, yS, Laberinto, camino):
     #Intenta encontrar si esas coordenadas ya estan en el camino que ha recorrido
     try:
         indice = camino.index(coordenada) #En caso de ya haber pasado por ahi, encontramos el indice en el que esta
-        posibleCamino.append(posiblesCaminos(Laberinto, xR, yR, camino)) 
-        posibleCamino.remove(camino[indice + 1]) #Se llama a posibles caminos de forma normal, pero se quita lo que hizo despues de pasar por el punto repetido
-        print(posibleCamino)
+        posibleCamino = posiblesCaminos(Laberinto, xR, yR)
         
-        xR = posibleCamino[0][0][1]
-        yR = posibleCamino[0][0][1]
+        posibleCamino.pop(0) #Se llama a posibles caminos de forma normal, pero se quita lo que hizo despues de pasar por el punto repetido    
+        xR = posibleCamino[0][0]
+        yR = posibleCamino[0][1]
+        camino.append([xR, yR])
         resolucion(xR,yR,xS,yS, Laberinto, camino)
         
     #Si no hay bucle, sigue su camino con normalidad
     except:
-        posibleCamino.append(posiblesCaminos(Laberinto, xR, yR, camino))
-        print(posibleCamino)
+        posibleCamino = posiblesCaminos(Laberinto, xR, yR)
 
+        xR = posibleCamino[0][0]
+        yR = posibleCamino[0][1]
         camino.append([xR, yR])
-        xR = posibleCamino[0][0][0]
-        yR = posibleCamino[0][0][1]
         resolucion(xR,yR,xS,yS, Laberinto, camino)
 
 
@@ -150,9 +149,6 @@ try:
     imprimeLab(xR, yR, xS, yS, Laberinto, Quesos)
     
     resolucion(xR, yR, xS, yS, Laberinto, camino)
-    
-    Bucle(xR, yR, camino)
-
 
     archivo.close()
     print("\n\nARCHIVO CERRADO: ", archivo.closed)
