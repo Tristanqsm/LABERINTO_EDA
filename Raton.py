@@ -74,7 +74,7 @@ def resolucion(xR,yR, xS, yS, Laberinto, camino):
         print(posibleCamino)
         
         xR = posibleCamino[0][0][1]
-        yR = posibleCamino[0][0[1]]
+        yR = posibleCamino[0][0][1]
         resolucion(xR,yR,xS,yS, Laberinto, camino)
         
     #Si no hay bucle, sigue su camino con normalidad
@@ -86,12 +86,6 @@ def resolucion(xR,yR, xS, yS, Laberinto, camino):
         xR = posibleCamino[0][0][0]
         yR = posibleCamino[0][0][1]
         resolucion(xR,yR,xS,yS, Laberinto, camino)
-    
-    
-    
-    
-
-    
 
 
 #======== AQUI EMPIEZA EL PROGRAMA PRINCIPAL ========#
@@ -117,9 +111,17 @@ try:
     Linea2 = renglon[1]
     Quesos = []
     Coordenadas = Linea2.replace('(', '').replace(')', '').split()
-    for coordenada in Coordenadas:
-        x, y = map(int, coordenada.split(','))
+    Coordenadas = list(map(int, Coordenadas))
+    print(Coordenadas)
+    
+    i = 0
+    while i<7:
+        x = Coordenadas[i]
+        print(x)
+        y = Coordenadas[i + 1]
+        print(y)
         Quesos.append([x,y])
+        i = i + 2
 
 # "Linea3" guarda el tercer renglon del archivo txt, donde se encuentra la vida que otorgan los quesos y la vida del raton
     Linea3 = renglon[2]
@@ -150,7 +152,9 @@ try:
     
     imprimeLab(xR, yR, xS, yS, Laberinto, Quesos)
     
-    resolucion(xR, yR, xS, yS, Laberinto, camino, vQ, vR)
+    resolucion(xR, yR, xS, yS, Laberinto, camino)
+    
+    Bucle(xR, yR, camino)
 
 
     archivo.close()
