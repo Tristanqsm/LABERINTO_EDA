@@ -112,14 +112,11 @@ try:
     Quesos = []
     Coordenadas = Linea2.replace('(', '').replace(')', '').split()
     Coordenadas = list(map(int, Coordenadas))
-    print(Coordenadas)
     
     i = 0
     while i<7:
         x = Coordenadas[i]
-        print(x)
         y = Coordenadas[i + 1]
-        print(y)
         Quesos.append([x,y])
         i = i + 2
 
