@@ -46,7 +46,7 @@ def posiblesCaminos(Laberinto, xR, yR):
             posiblesPasos.append([xR+1, yR])
 
     #Abajo
-    if yR < (len(Laberinto[0]) - 1) and Laberinto[yR+1][xR] != 'X':
+    if yR < len(Laberinto) - 1 and Laberinto[yR+1][xR] != 'X':
         posiblesPasos.append([xR, yR+1])
 
     #Izquierda
@@ -55,78 +55,73 @@ def posiblesCaminos(Laberinto, xR, yR):
         
     return posiblesPasos
 
-def resolucion(xR,yR, xS, yS, Laberinto, camino, vR):
+def resolucion(xR,yR, xS, yS, Laberinto, camino, vR, vQ):
     
+    #Lista reservada para los posibles caminos
     posibleCamino = []
     
+    if(Laberinto[yR][xS] == "Q"):
+        vR = vR + vQ
+
     if (vR == 0):
         print("No sobrevivi :(\nMi camino fue", camino)
         return
-            
-    
+             
     if xR == xS and yR == yS:
         print("LOGRE SALIR!!")
-        camino.append([xS, yS])
         print("Mi camino fue: ", camino)
+        print("\nVida restante del raton: ", vR)
         return
     
-    coordenada = [xR, yR]
-    
-    #Con un try se busca si hay un bucle
+    #Se busca si hay un bucle
     
     try:
         
-        #En caso de ya haber pasado por ahi, encontramos el o los indices en el que se repite el paso
-        
-        copiaCamino = camino
-        indices = []
-        
-        i = 0
-        while i < len(camino):
-            try:
-                copiaCamino.index(coordenada)
-                i = i + 1
-            except:
-                return
-        
-        #Usamos dos variables adicionales para almacenar el movimiento repetido
-        xRep = xR
-        yRep = yR
-        
-        #Se vuelven a buscar los posibles caminos
-        posibleCamino = posiblesCaminos(Laberinto, xRep, yRep)
-        
-        #Encontramos el paso que hizo despues del movimiento repetido, para quitarlo de las opciones
-        j = 0
-        while j < i:
+        #En caso de ya haber pasado por ahi, podremos hacer uso de la funcion index y ver si ya se encontraba en el recorrido (exceptuando el ultimo elemento)
+
+        if camino.index([xR, yR]) != len(camino) - 1:
             
-            #Se remueve la coordenada repetida para salir del bucle
-            posibleCamino.pop(j)
-            j = j + 1
+            #Se vuelven a buscar los posibles caminos
+            posibleCamino = posiblesCaminos(Laberinto, xR, yR)
+            
+            #Se cuenta cuantas veces se ha repetido ese movimiento, para saber cuantos numeros de opciones hay que saltar
+            repeticiones = camino.count([xR, yR]) - 1
+            
+            #En caso de que ya no queden opciones, se regresara a la casilla anterior 
+            if len(posibleCamino) <= repeticiones:
+                xR = camino[-2][0]
+                yR = camino[-2][1]
+                    
+            #En caso de que si, tomara una nueva direccion, saltando las opciones, segun cuantas veces se ha repetido el movimiento
+            else:
+                xR = posibleCamino[repeticiones][0]
+                yR = posibleCamino[repeticiones][1] 
         
-        #Se mueve a la siguiente direccion de la lista, exceptuando el paso que llevo al bucle 
-        xR = posibleCamino[0][0]
-        yR = posibleCamino[0][1]
+        #Si no se ha pasado por ahi antes, entonces se lleva el procedimiento habitual para asignar nuevas xR y yR 
+        else:
+            posibleCamino = posiblesCaminos(Laberinto, xR, yR)
         
-        #Se agrega el nuevo paso al camino
+            xR = posibleCamino[0][0]
+            yR = posibleCamino[0][1]
+        
+            
         camino.append([xR, yR])
+        vR = vR - 1    
+        resolucion(xR,yR,xS,yS, Laberinto, camino, vR, vQ)  
         
-        #Se le resta vida al raton por cada movimiento
-        vR = vR - 1
-        
-        resolucion(xR,yR,xS,yS, Laberinto, camino, vR)
-        
+        return  
+    
+    #En caso de que index no encuentre el indice, para que no genere un error, se hace uso de un excpt, en donde se lleva el procedimiento habitual        
     except:
     
         posibleCamino = posiblesCaminos(Laberinto, xR, yR)
         
         xR = posibleCamino[0][0]
         yR = posibleCamino[0][1]
-        camino.append([xR, yR])
         
-        vR = vR - 1
-        
-        resolucion(xR,yR,xS,yS, Laberinto, camino, vR)
+    camino.append([xR, yR])
+    vR = vR - 1    
+    resolucion(xR,yR,xS,yS, Laberinto, camino, vR, vQ)
     
 
 
@@ -189,9 +184,12 @@ try:
     print(f"La vida que otorga un queso es:", vQ)
     print(f"La vida del raton es:", vR)
     
+    #Se añaden las coordenadas iniciales
+    camino.append([xR, yR]) 
+    
     imprimeLab(xR, yR, xS, yS, Laberinto, Quesos)
     
-    resolucion(xR, yR, xS, yS, Laberinto, camino, vR)
+    resolucion(xR, yR, xS, yS, Laberinto, camino, vR, vQ)
 
     archivo.close()
     print("\n\nARCHIVO CERRADO: ", archivo.closed)
