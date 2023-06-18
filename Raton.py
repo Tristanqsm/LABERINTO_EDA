@@ -61,6 +61,7 @@ def resolucion(xR,yR, xS, yS, Laberinto, camino, vR):
     
     if (vR == 0):
         print("No sobrevivi :(\nMi camino fue", camino)
+        return
             
     
     if xR == xS and yR == yS:
@@ -72,28 +73,45 @@ def resolucion(xR,yR, xS, yS, Laberinto, camino, vR):
     coordenada = [xR, yR]
     
     #Con un try se busca si hay un bucle
+    
     try:
         
-        #En caso de ya haber pasado por ahi, encontramos el indice en el que esta el paso repetido
-        indice = camino.index(coordenada) 
+        #En caso de ya haber pasado por ahi, encontramos el o los indices en el que se repite el paso
+        
+        copiaCamino = camino
+        indices = []
+        
+        i = 0
+        while i < len(camino):
+            try:
+                indice = camino.index(coordenada)
+                copiaCamino.pop(indice)
+                indices.append(indice)
+                i = i + 1
+            except:
+                i = i + 1
+            
         
         #Usamos dos variables adicionales para almacenar el movimiento repetido
         xRep = xR
         yRep = yR
         
-        #Encontramos el paso anterior al paso repetido y hacemos backtrack
-        xR = camino[indice - 1][0]
-        yR = camino[indice - 1][1]
-        
         #Se vuelven a buscar los posibles caminos
-        posibleCamino = posiblesCaminos(Laberinto, xR, yR)
+        posibleCamino = posiblesCaminos(Laberinto, xRep, yRep)
         
-        #Se remueve la coordenada repetida para salir del bucle
-        posibleCamino.remove([xRep, yRep]) 
+        #Encontramos el paso que hizo despues del movimiento repetido, para quitarlo de las opciones
+        i = 0
+        while i < len(indices):
+            Quitar = camino[indices[i] + 1]
+            #Se remueve la coordenada repetida para salir del bucle
+            posibleCamino.remove(Quitar) 
+            i = i + 1
         
-        #Se mueve a otra dirección 
+        #Se mueve a la siguiente direccion de la lista, exceptuando el paso que llevo al bucle 
         xR = posibleCamino[0][0]
         yR = posibleCamino[0][1]
+        
+        #Se agrega el nuevo paso al camino
         camino.append([xR, yR])
         
         #Se le resta vida al raton por cada movimiento
@@ -102,6 +120,7 @@ def resolucion(xR,yR, xS, yS, Laberinto, camino, vR):
         resolucion(xR,yR,xS,yS, Laberinto, camino, vR)
         
     except:
+    
         posibleCamino = posiblesCaminos(Laberinto, xR, yR)
         
         xR = posibleCamino[0][0]
