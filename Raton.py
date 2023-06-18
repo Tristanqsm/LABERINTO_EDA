@@ -84,13 +84,10 @@ def resolucion(xR,yR, xS, yS, Laberinto, camino, vR):
         i = 0
         while i < len(camino):
             try:
-                indice = camino.index(coordenada)
-                copiaCamino.pop(indice)
-                indices.append(indice)
+                copiaCamino.index(coordenada)
                 i = i + 1
             except:
-                i = i + 1
-            
+                return
         
         #Usamos dos variables adicionales para almacenar el movimiento repetido
         xRep = xR
@@ -100,12 +97,12 @@ def resolucion(xR,yR, xS, yS, Laberinto, camino, vR):
         posibleCamino = posiblesCaminos(Laberinto, xRep, yRep)
         
         #Encontramos el paso que hizo despues del movimiento repetido, para quitarlo de las opciones
-        i = 0
-        while i < len(indices):
-            Quitar = camino[indices[i] + 1]
+        j = 0
+        while j < i:
+            
             #Se remueve la coordenada repetida para salir del bucle
-            posibleCamino.remove(Quitar) 
-            i = i + 1
+            posibleCamino.pop(j)
+            j = j + 1
         
         #Se mueve a la siguiente direccion de la lista, exceptuando el paso que llevo al bucle 
         xR = posibleCamino[0][0]
