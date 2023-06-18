@@ -56,7 +56,6 @@ def posiblesCaminos(Laberinto, xR, yR):
     return posiblesPasos
 
 def resolucion(xR,yR, xS, yS, Laberinto, camino, vR, vQ):
-    
     #Lista reservada para los posibles caminos
     posibleCamino = []
     
@@ -137,34 +136,29 @@ try:
     Linea1 = renglon[0]
 
     #Coordenadas del raton:
-    xR = int(Linea1[:1])
-    yR = int(Linea1[2:3])
+    xR = int(Linea1[:2])
+    yR = int(Linea1[3:5])
 
     #Coordenadas de la salida:
-    xS = int(Linea1[4:5])
-    yS = int(Linea1[6:7])
+    xS = int(Linea1[6:8])
+    yS = int(Linea1[8:11])
 
 # "Linea2" guarda el segundo renglon del archivo txt, donde se encuentran las coordenadas de los quesos
     Linea2 = renglon[1]
     Quesos = []
     Coordenadas = Linea2.replace('(', '').replace(')', '').split()
-    Coordenadas = list(map(int, Coordenadas))
-    
-    i = 0
-    while i<7:
-        x = Coordenadas[i]
-        y = Coordenadas[i + 1]
+    for coordenada in Coordenadas:
+        x, y = map(int, coordenada.split(','))
         Quesos.append([x,y])
-        i = i + 2
 
 # "Linea3" guarda el tercer renglon del archivo txt, donde se encuentra la vida que otorgan los quesos y la vida del raton
     Linea3 = renglon[2]
 
     #Vida de los quesos:
-    vQ = int(Linea3[0:2])
+    vQ = int(Linea3[:2])
 
     #Vida del raton:
-    vR = int(Linea3[2:4])
+    vR = int(Linea3[2:5])
 
 
 # "Laberinto" guarda la estructura del laberinto    
