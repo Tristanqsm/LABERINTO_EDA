@@ -55,9 +55,13 @@ def posiblesCaminos(Laberinto, xR, yR):
         
     return posiblesPasos
 
-def resolucion(xR,yR, xS, yS, Laberinto, camino):
+def resolucion(xR,yR, xS, yS, Laberinto, camino, vR):
     
     posibleCamino = []
+    
+    if (vR == 0):
+        print("No sobrevivi :(\nMi camino fue", camino)
+            
     
     if xR == xS and yR == yS:
         print("LOGRE SALIR!!")
@@ -91,7 +95,11 @@ def resolucion(xR,yR, xS, yS, Laberinto, camino):
         xR = posibleCamino[0][0]
         yR = posibleCamino[0][1]
         camino.append([xR, yR])
-        resolucion(xR,yR,xS,yS, Laberinto, camino)
+        
+        #Se le resta vida al raton por cada movimiento
+        vR = vR - 1
+        
+        resolucion(xR,yR,xS,yS, Laberinto, camino, vR)
         
     except:
         posibleCamino = posiblesCaminos(Laberinto, xR, yR)
@@ -99,7 +107,10 @@ def resolucion(xR,yR, xS, yS, Laberinto, camino):
         xR = posibleCamino[0][0]
         yR = posibleCamino[0][1]
         camino.append([xR, yR])
-        resolucion(xR,yR,xS,yS, Laberinto, camino)
+        
+        vR = vR - 1
+        
+        resolucion(xR,yR,xS,yS, Laberinto, camino, vR)
     
 
 
@@ -142,7 +153,7 @@ try:
     vQ = int(Linea3[0:2])
 
     #Vida del raton:
-    vR = int(Linea3[3:5])
+    vR = int(Linea3[2:4])
 
 
 # "Laberinto" guarda la estructura del laberinto    
@@ -164,7 +175,7 @@ try:
     
     imprimeLab(xR, yR, xS, yS, Laberinto, Quesos)
     
-    resolucion(xR, yR, xS, yS, Laberinto, camino)
+    resolucion(xR, yR, xS, yS, Laberinto, camino, vR)
 
     archivo.close()
     print("\n\nARCHIVO CERRADO: ", archivo.closed)
